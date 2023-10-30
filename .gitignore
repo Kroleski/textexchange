@@ -9,6 +9,7 @@ __pycache__/
 *.env
 
 # Ignore the VS Code configuration
+.vscode
 .vscode/
 
 # Ignore any local development settings
@@ -28,9 +29,6 @@ secret_key
 
 # Ignore any other sensitive information
 *.secret
-
-# Ignore IDE-specific files
-.vscode/
 
 # Ignore any editor-specific files
 *~
