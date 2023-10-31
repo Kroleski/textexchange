@@ -1,67 +1,9 @@
 # Ignore virtual environment
 venv/
 
-# Ignore compiled Python files
-*.pyc
-__pycache__/
-
-# Ignore local settings file
-*.env
-
 # Ignore the VS Code configuration
 .vscode
 .vscode/
 
-# Ignore any local development settings
-*.local
-
-# Ignore the static files directory
-staticfiles/
-
-# Ignore media files
-media/
-
-# Ignore logs
-logs/
-
-# Ignore the secret key file
-secret_key
-
-# Ignore any other sensitive information
-*.secret
-
-# Ignore any editor-specific files
-*~
-.project
-.settings
-*.suo
-*.user
-*.sln
-*.swp
-*.swo
-
-# Ignore pipenv files
-Pipfile
-Pipfile.lock
-
-# Ignore pytest cache
-__pycache__/
-.cache/
-
 # Ignore macOS folder attributes
 .DS_Store
-
-# Ignore Python bytecode
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Ignore pytest cache
-__pycache__/
-.cachegrind
-.cache
-.pytest_cache
-
-# Ignore any environment-specific files
-.env

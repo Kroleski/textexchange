@@ -1,3 +1,55 @@
 from django.db import models
+from django.urls import reverse
 
-# Create your models here.
+class User(models.Model):
+    name = models.CharField(max_length=200)
+    phone = models.CharField(max_length=10)
+    email = models.CharField("Email", max_length=200)
+    def __str__(self):
+        return self.name
+    def get_absolute_url(self):
+        return reverse('user-detail', args=[str(self.id)])
+
+class Book(models.Model):
+    FORMAT = (
+    ('Hardcover', 'Hardcover'),
+    ('Paperback', 'Paperback'),
+    ('PDF', 'PDF file'),
+    ('Digital', 'Digital file containing the book'),
+    ('Link', 'Link to the book or a free download site'),
+    )
+    isbn = models.CharField(max_length=13)
+    title = models.CharField(max_length=200)
+    format = models.CharField(max_length=200, choices=FORMAT, blank = False)
+    description = models.TextField(null=True, blank=True)
+    def __str__(self):
+        return self.title
+    def get_absolute_url(self):
+        return reverse('book-detail', args=[str(self.id)])
+
+class OwnedBook(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
+    is_available = models.BooleanField(default = False)
+    condition = models.CharField(max_length=200)
+    def __str__(self):
+        return self.book_id.title
+    def get_absolute_url(self):
+        return reverse('ownedbook-detail', args=[str(self.id)])
+    
+class BorrowedBook(models.Model):
+    ownedbook = models.ForeignKey(OwnedBook, on_delete=models.CASCADE, default = None)
+    borrower = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
+    def __str__(self):
+        return self.book_id.title
+    def get_absolute_url(self):
+        return reverse('borrowedbook-detail', args=[str(self.id)])
+
+class WantedBook(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
+    def __str__(self):
+        return self.book_id.title
+    def get_absolute_url(self):
+        return reverse('wantedbook-detail', args=[str(self.id)])
