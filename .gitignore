@@ -1,5 +1,6 @@
 # Ignore virtual environment
 venv/
+djvenv/
 
 # Ignore the VS Code configuration
 .vscode
@@ -7,3 +8,111 @@ venv/
 
 # Ignore macOS folder attributes
 .DS_Store
+
+# Ignore virtual environment
+venv/
+
+# Ignore database file
+db.sqlite3
+
+# Ignore compiled Python files
+*.pyc
+__pycache__/
+
+# Ignore local settings file
+*.env
+
+# Ignore the VS Code configuration
+.vscode/
+
+# Ignore any local development settings
+*.local
+
+# Ignore the static files directory
+staticfiles/
+
+# Ignore media files
+media/
+
+# Ignore logs
+logs/
+
+# Ignore database backup files
+*.bak
+
+# Ignore the secret key file
+secret_key
+
+# Ignore any other sensitive information
+*.secret
+
+# Ignore the coverage directory (if you're using coverage.py)
+htmlcov/
+
+# Ignore any custom user-specific files
+*.user
+
+# Ignore IDE-specific files
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+.vscode/
+
+# Ignore any editor-specific files
+*~
+.project
+.settings
+*.suo
+*.user
+*.sln
+*.swp
+*.swo
+
+# Ignore pipenv files
+Pipfile
+Pipfile.lock
+
+# Ignore local database
+*.sqlite3
+
+# Ignore pytest cache
+__pycache__/
+.cache/
+
+# Ignore development database
+db.sqlite3
+
+# Ignore macOS folder attributes
+.DS_Store
+
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore pytest cache
+__pycache__/
+.cachegrind
+.cache
+.pytest_cache
+
+# Ignore any environment-specific files
+.env
+
+# Ignore Heroku-specific files
+*.heroku
+
+# Ignore IDE specific files
+.idea/
+*.iml
+
+# Ignore PyCharm specific files
+*.pyc
+*.pyo
+*.idea/
+.idea/
+
+# Ignore SQLite database files
+*.sqlite3
+*.sqlite3-journal
