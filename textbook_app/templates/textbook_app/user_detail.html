@@ -15,4 +15,16 @@
     </strong>
     {{ user.email }}
 </p>
+
+<h2>
+    Owned Books:</h2>
+    <ul>
+        {% for owned_book in owned_books %}
+        <li>
+            <a href="{% url 'book-detail' owned_book.book.id %}">
+                {{ owned_book.book.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

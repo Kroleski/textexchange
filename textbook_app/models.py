@@ -20,6 +20,7 @@ class Book(models.Model):
     )
     isbn = models.CharField(max_length=13)
     title = models.CharField(max_length=200)
+    author = models.CharField(max_length=200, default='', null=True, blank=True)
     format = models.CharField(max_length=200, choices=FORMAT, blank = False)
     description = models.TextField(null=True, blank=True)
     def __str__(self):
@@ -28,12 +29,12 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
 class OwnedBook(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
     is_available = models.BooleanField(default = False)
     condition = models.CharField(max_length=200)
     def __str__(self):
-        return self.book_id.title
+        return self.book.title
     def get_absolute_url(self):
         return reverse('ownedbook-detail', args=[str(self.id)])
     

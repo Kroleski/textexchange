@@ -1,10 +1,10 @@
-<!-- inherit from base.html-->
-{% extends "textbook_app/base_template.html" %}
+{% extends 'textbook_app/base_template.html' %}
 
-<!-- Replace block content in base_template.html -->
 {% block content %}
-<h1>Books</h1>
-
-<h2>More to come</h2>
-
+  <h1>Available Books</h1>
+  <ul>
+    {% for book in available_books %}
+      <li><a href="{% url 'book-detail' book.book.id %}">{{ book.book.title }}</a></li>
+    {% endfor %}
+  </ul>
 {% endblock %}

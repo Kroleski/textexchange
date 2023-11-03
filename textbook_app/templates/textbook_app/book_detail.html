@@ -1,0 +1,30 @@
+{% extends 'textbook_app/base_template.html' %}
+{% block content %}
+<h1>
+    Book Details
+</h1>
+<p>
+    <strong>
+        ISBN:
+    </strong> 
+    {{ book.isbn }}
+</p>
+<p>
+    <strong>
+        Title:
+    </strong> 
+    {{ book.title }}
+</p>
+<p>
+    <strong>
+        Format:
+    </strong> 
+    {{ book.get_format_display }}
+</p>
+<p>
+    <strong>
+        Description:
+    </strong> 
+    {{ book.description }}
+</p>
+{% endblock %}
