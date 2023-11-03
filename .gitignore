@@ -1,6 +1,5 @@
 # Ignore virtual environment
 venv/
-djvenv/
 
 # Ignore the VS Code configuration
 .vscode
