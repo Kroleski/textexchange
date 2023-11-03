@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'textbook_app',
-    'bootstrap5',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -70,9 +69,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'builtins':[
-                'bootstrap5.templatetags.bootstrap5',
-            ]
         },
     },
 ]
