@@ -12,6 +12,7 @@ path('book/delete/<int:pk>/', views.book_confirm_delete, name='book-confirm-dele
 path('books/', list_books, name='books'),
 path('owned-book-add/<int:user_id>/', views.owned_book_add, name='owned-book-add'),
 path('toggle-availability/<int:owned_book_id>/', views.toggle_availability, name='toggle-availability'),
-path('users/', views.UserListView.as_view(), name= 'users'),
+path('user/add/', views.user_add, name='user-add'),
 path('user/<int:pk>', views.UserDetailView.as_view(), name='user-detail'),
+path('users/', views.UserListView.as_view(), name= 'users'),
 ]

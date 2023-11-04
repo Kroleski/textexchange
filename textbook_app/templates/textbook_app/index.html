@@ -3,6 +3,7 @@
 {% block content %}
   <h1>Books Currently Available</h1>
   <ul>
+    {% if available_books %}
     {% for book in available_books %}
       <li>
         <a href="{% url 'book-detail' book.book.id %}">
@@ -14,5 +15,10 @@
         <p>
       </li>
     {% endfor %}
+    {% else %}
+    <p>
+      There are no available books.
+    </p>
+    {% endif %}
   </ul>
 {% endblock %}

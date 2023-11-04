@@ -16,4 +16,8 @@
     There are no users registered.
 </p>
 {% endif %}
+<form action="{% url 'user-add' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Add New User">
+</form>
 {% endblock %}

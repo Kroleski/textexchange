@@ -1,4 +1,4 @@
-from .forms import BookForm, OwnedBookForm
+from .forms import BookForm, OwnedBookForm, UserForm
 from .models import User, Book, OwnedBook
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
@@ -57,6 +57,16 @@ def toggle_availability(request, owned_book_id):
     owned_book.is_available = not owned_book.is_available
     owned_book.save()
     return redirect('user-detail', pk=owned_book.user.id)
+
+def user_add(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('users')
+    else:
+        form = BookForm()
+    return render(request, 'textbook_app/book_add.html', {'form': form})
 
 class UserListView(generic.ListView):
     model = User

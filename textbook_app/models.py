@@ -29,10 +29,16 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
 class OwnedBook(models.Model):
+    CONDITION = (
+    ('Like New', 'Like New - as if just purchased new'),
+    ('Slightly Used', 'Slightly Used - some minor wear and tear'),
+    ('Heavily Used', 'Heavily Used - some major wear and tear'),
+    ('Poor', 'Poor - The book is in really bad condition'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
     is_available = models.BooleanField(default = False)
-    condition = models.CharField(max_length=200)
+    condition = models.CharField(max_length=200, choices=CONDITION, blank = False)
     def __str__(self):
         return self.book.title
     def get_absolute_url(self):

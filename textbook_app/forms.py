@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Book, OwnedBook
+from .models import Book, OwnedBook, User
 
 class BookForm(ModelForm):
     class Meta:
@@ -10,3 +10,8 @@ class OwnedBookForm(ModelForm):
     class Meta:
         model = OwnedBook
         fields = ['book', 'condition']
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['name', 'phone', 'email']
