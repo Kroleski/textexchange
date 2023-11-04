@@ -15,16 +15,30 @@
     </strong>
     {{ user.email }}
 </p>
-
 <h2>
     Owned Books:</h2>
     <ul>
         {% for owned_book in owned_books %}
         <li>
             <a href="{% url 'book-detail' owned_book.book.id %}">
-                {{ owned_book.book.title }}
-            </a>
+                {{ owned_book.book.title }}</a>
+             {% if owned_book.is_available %}
+                <form action="{% url 'toggle-availability' owned_book.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="submit" value="Make Unavailable">
+                </form>
+            {% else %}
+                <form action="{% url 'toggle-availability' owned_book.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="submit" value="Make Available">
+                </form>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
+</h2>
+<form action="{% url 'owned-book-add' user.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Add Another Book to Your Owned Books">
+</form>
 {% endblock %}

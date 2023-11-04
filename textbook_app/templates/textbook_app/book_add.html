@@ -1,0 +1,10 @@
+{% extends 'textbook_app/base_template.html' %}
+
+{% block content %}
+  <h1>Add a New Book</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Renders the form fields as paragraphs -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

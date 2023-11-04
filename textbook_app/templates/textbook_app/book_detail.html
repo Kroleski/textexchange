@@ -5,15 +5,21 @@
 </h1>
 <p>
     <strong>
-        ISBN:
-    </strong> 
-    {{ book.isbn }}
-</p>
-<p>
-    <strong>
         Title:
     </strong> 
     {{ book.title }}
+</p>
+<p>
+    <strong>
+        Author(s):
+    </strong> 
+    {{ book.author }}
+</p>
+<p>
+    <strong>
+        ISBN:
+    </strong> 
+    {{ book.isbn }}
 </p>
 <p>
     <strong>
@@ -27,4 +33,10 @@
     </strong> 
     {{ book.description }}
 </p>
+<a href="{% url 'book-edit' pk=book.pk %}" class="btn btn-primary">
+    Edit Book
+</a>
+<a href="{% url 'book-confirm-delete' pk=book.pk %}" class="btn btn-danger">
+    Delete Book
+</a>
 {% endblock %}

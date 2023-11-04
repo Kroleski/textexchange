@@ -8,13 +8,14 @@
         {% load bootstrap5 %}
         {% bootstrap_css %}
         {% bootstrap_javascript %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     </head>
     
     <body>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/textbookexchangelogo.png' %}">
+                <img src="{% static 'images/textbookexchangelogo2.png' %}" height="100">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon">
 
@@ -24,17 +25,17 @@
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'index' %}">
-                                Home
+                                Available Books
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'books' %}">
+                                All Books
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'users' %}">
                                 Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                Menu 2
                             </a>
                         </li>
                     </ul>
