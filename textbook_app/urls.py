@@ -16,3 +16,4 @@ path('user/add/', views.user_add, name='user-add'),
 path('user/<int:pk>', views.UserDetailView.as_view(), name='user-detail'),
 path('users/', views.UserListView.as_view(), name= 'users'),
 ]
+

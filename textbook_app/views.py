@@ -12,7 +12,7 @@ def book_add(request):
         form = BookForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('books')  # Replace 'book_list' with the URL name for your book list view
+            return redirect('books')
     else:
         form = BookForm()
     return render(request, 'textbook_app/book_add.html', {'form': form})

@@ -6,3 +6,4 @@ admin.site.register(Book)
 admin.site.register(OwnedBook)
 admin.site.register(BorrowedBook)
 admin.site.register(WantedBook)
+
