@@ -9,19 +9,17 @@
         {% bootstrap_css %}
         {% bootstrap_javascript %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <script type="text/javascript" src="https://books.google.com/books/previewlib.js"></script>
     </head>
     
     <body>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
+            <div id="logo">
                 <img src="{% static 'images/textbookexchangelogo2.png' %}" height="100" alt="Textbook Exchange Logo featuring an open book">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon">
-
-                    </span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
+            </div>
+            <div class="container">
+                <div id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'index' %}">
@@ -35,9 +33,32 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'users' %}">
-                                Users
+                                All Users
                             </a>
                         </li>
+                        {% comment %} <li class="nav-item">
+                            <a class="nav-link" href="{% url 'book-search' %}">
+                                Search for Book Details on Google
+                            </a>
+                        </li> {% endcomment %}
+                    </ul>
+                </div>
+                <div class="userid">
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                        <li class="userid" style="color: #e6b17e;">
+                                User: {{ user.get_username }}  
+                            <a class="nav-link" href="{% url 'logout' %}?next={{ request.path }}">
+                                Logout
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">
+                                Login
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

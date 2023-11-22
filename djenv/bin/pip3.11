@@ -1,4 +1,4 @@
-#!/Users/bobkroleski/Documents/Code/CS3300/textexchange/djenv/bin/python3
+#!/Users/bobkroleski/Documents/Code/CS3300/textexchange/djenv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

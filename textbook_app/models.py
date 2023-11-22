@@ -1,3 +1,6 @@
+from datetime import date
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser, AnonymousUser
 from django.db import models
 from django.urls import reverse
 
@@ -48,10 +51,14 @@ class BorrowedBook(models.Model):
     ownedbook = models.ForeignKey(OwnedBook, on_delete=models.CASCADE, default = None)
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
+    due_back = models.DateField(default = None)
     def __str__(self):
         return self.book_id.title
     def get_absolute_url(self):
         return reverse('borrowedbook-detail', args=[str(self.id)])
+    @property
+    def is_overdue(self):
+        return bool(self.due_back and date.today() > self.due_back)
 
 class WantedBook(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default = None)

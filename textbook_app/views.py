@@ -1,5 +1,7 @@
 from .forms import BookForm, OwnedBookForm, UserForm
 from .models import User, Book, OwnedBook
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
@@ -7,6 +9,22 @@ def index(request):
     available_books = OwnedBook.objects.filter(is_available=True).order_by('book__title')
     return render(request, 'textbook_app/index.html', {'available_books': available_books})
 
+@login_required
+def addBook(request, ownedbook_id):
+    ownedbook = OwnedBook.objects.get(pk=ownedbook_id)
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.ownedbook = ownedbook
+            book.save()
+            return redirect('ownedbook-detail', ownedbook_id)
+    else:
+        form = BookForm()
+        context = {'form': form}
+        return render(request, 'textbook_app/book_form.html', context)
+
+@login_required
 def book_add(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
@@ -17,17 +35,7 @@ def book_add(request):
         form = BookForm()
     return render(request, 'textbook_app/book_add.html', {'form': form})
 
-def book_edit(request, pk):
-    book = get_object_or_404(Book, pk=pk)
-    if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
-        if form.is_valid():
-            form.save()
-            return redirect('book-detail', pk=pk)
-    else:
-        form = BookForm(instance=book)
-    return render(request, 'textbook_app/book_edit.html', {'form': form, 'book': book})
-
+@login_required
 def book_confirm_delete(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
@@ -39,6 +47,22 @@ def list_books(request):
     books = Book.objects.all()
     return render(request, 'textbook_app/book_list.html', {'books': books})
 
+@login_required
+def book_edit(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('book-detail', pk=pk)
+    else:
+        form = BookForm(instance=book)
+    return render(request, 'textbook_app/book_edit.html', {'form': form, 'book': book})
+
+def book_search(request, isbn):
+    return render(request, 'https://books.google.com/books?jscmd=viewapi&bibkeys=0596000278,00-invalid-isbn,ISBN0765304368,0439554934&callback=ProcessGBSBookInfo')
+
+@login_required
 def owned_book_add(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
@@ -52,6 +76,7 @@ def owned_book_add(request, user_id):
         form = OwnedBookForm()
     return render(request, 'textbook_app/owned_book_add.html', {'form': form})
 
+@login_required
 def toggle_availability(request, owned_book_id):
     owned_book = get_object_or_404(OwnedBook, id=owned_book_id)
     owned_book.is_available = not owned_book.is_available
@@ -66,12 +91,12 @@ def user_add(request):
             return redirect('users')
     else:
         form = BookForm()
-    return render(request, 'textbook_app/book_add.html', {'form': form})
+    return render(request, 'textbook_app/user_add.html', {'form': form})
 
-class UserListView(generic.ListView):
-    model = User
+class UserListView(LoginRequiredMixin, generic.ListView):
+    model =User
     
-class UserDetailView(generic.DetailView):
+class UserDetailView(LoginRequiredMixin, generic.DetailView):
     model = User
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
@@ -96,17 +121,3 @@ class BookListView(generic.ListView):
 
 class BookDetailView(generic.DetailView):
     model = Book
-
-def addBook(request, ownedbook_id):
-    ownedbook = OwnedBook.objects.get(pk=ownedbook_id)
-    if request.method == 'POST':
-        form = BookForm(request.POST)
-        if form.is_valid():
-            book = form.save(commit=False)
-            book.ownedbook = ownedbook
-            book.save()
-            return redirect('ownedbook-detail', ownedbook_id)
-    else:
-        form = BookForm()
-        context = {'form': form}
-        return render(request, 'textbook_app/book_form.html', context)
