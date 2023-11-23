@@ -59,9 +59,6 @@ def book_edit(request, pk):
         form = BookForm(instance=book)
     return render(request, 'textbook_app/book_edit.html', {'form': form, 'book': book})
 
-def book_search(request, isbn):
-    return render(request, 'https://books.google.com/books?jscmd=viewapi&bibkeys=0596000278,00-invalid-isbn,ISBN0765304368,0439554934&callback=ProcessGBSBookInfo')
-
 @login_required
 def owned_book_add(request, user_id):
     user = get_object_or_404(User, pk=user_id)

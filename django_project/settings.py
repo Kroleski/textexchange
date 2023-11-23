@@ -94,6 +94,7 @@ os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = '/'
 MEDIA_URL = '/images/'
 
+AUTH_USER_MODEL = 'textbook_app.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 WSGI_APPLICATION = 'django_project.wsgi.application'

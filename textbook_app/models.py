@@ -1,15 +1,35 @@
-from datetime import date
-from django.conf import settings
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser, AnonymousUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager, User
 from django.db import models
 from django.urls import reverse
 
-class User(models.Model):
-    name = models.CharField(max_length=200)
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, username, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self.create_user(email, username, password, **extra_fields)
+    
+class User(AbstractUser):
+    username = models.CharField(max_length=200, default="")
     phone = models.CharField(max_length=10)
-    email = models.CharField("Email", max_length=200)
+    email = models.EmailField("Email", unique=True)
+    objects = CustomUserManager()
+    USERNAME_FIELD='email'
+    REQUIRED_FIELDS = ['username', 'phone']
     def __str__(self):
-        return self.name
+        return self.username
     def get_absolute_url(self):
         return reverse('user-detail', args=[str(self.id)])
 
@@ -44,26 +64,26 @@ class OwnedBook(models.Model):
     condition = models.CharField(max_length=200, choices=CONDITION, blank = False)
     def __str__(self):
         return self.book.title
-    def get_absolute_url(self):
-        return reverse('ownedbook-detail', args=[str(self.id)])
+    # def get_absolute_url(self):
+    #     return reverse('ownedbook-detail', args=[str(self.id)])
     
-class BorrowedBook(models.Model):
-    ownedbook = models.ForeignKey(OwnedBook, on_delete=models.CASCADE, default = None)
-    borrower = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
-    due_back = models.DateField(default = None)
-    def __str__(self):
-        return self.book_id.title
-    def get_absolute_url(self):
-        return reverse('borrowedbook-detail', args=[str(self.id)])
-    @property
-    def is_overdue(self):
-        return bool(self.due_back and date.today() > self.due_back)
+# class BorrowedBook(models.Model):
+#     borrowed_book = models.ForeignKey(OwnedBook, on_delete=models.CASCADE, default = None)
+#     borrower = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
+#     book = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
+#     due_back = models.DateField(default = None)
+#     def __str__(self):
+#         return self.book.title
+#     def get_absolute_url(self):
+#         return reverse('borrowedbook-detail', args=[str(self.id)])
+#     @property
+#     def is_overdue(self):
+#         return bool(self.due_back and date.today() > self.due_back)
 
-class WantedBook(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
-    def __str__(self):
-        return self.book_id.title
-    def get_absolute_url(self):
-        return reverse('wantedbook-detail', args=[str(self.id)])
+# class WantedBook(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, default = None)
+#     book = models.ForeignKey(Book, on_delete=models.CASCADE, default = None)
+#     def __str__(self):
+#         return self.book.title
+#     def get_absolute_url(self):
+#         return reverse('wantedbook-detail', args=[str(self.id)])

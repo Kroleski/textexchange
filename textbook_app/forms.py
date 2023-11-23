@@ -14,4 +14,4 @@ class OwnedBookForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['name', 'phone', 'email']
+        fields = ['username', 'phone', 'email']
