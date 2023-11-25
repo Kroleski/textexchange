@@ -104,12 +104,43 @@ class ViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/accounts/login/?next=/users/')
 
+class AddBookViewTest(TestCase):
+    def setUp(self):
+        test_user = User.objects.create(username='testuser', phone='867-5309', email='testuser@example.com', password='testpassword')
+        test_book = Book.objects.create(isbn = '1234567890123', title = 'A Test Book', author='Arthur Testing', format='Hardcover', description='This book defies description')
+        test_user.save()
+        test_book.save()
+        self.ownedbook = OwnedBook.objects.create(user = test_user, book = test_book, is_available = True, condition = 'Like New')
+        self.ownedbook.save()
+        self.url = reverse('owned-book-add', args=[str(self.ownedbook.id)])
+
+    def test_add_book_view_with_valid_data(self):
+        self.client.login(username='testuser', password='testpassword')
+        form_data = {
+            'title': 'A Test Book',
+            'author': 'Arthur Testing',
+        }
+
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Book.objects.filter(title='A Test Book', ownedbook=self.ownedbook).exists())
+
+    def test_add_book_view_with_invalid_data(self):
+        self.client.login(username='testuser', password='testpassword')
+        form_data = {}
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+
+    def test_add_book_view_when_not_logged_in(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse('login') + f'?next={self.url}')
 
 class SeleniumViewsTests(LiveServerTestCase):
     def test_1_home_page(self):
         print('')
         print('Selenium TEST 1: Testing that the host is active and that the site title can be read...')
-        driver = webdriver.Safari()
+        options = webdriver.ChromeOptions()
+        driver = webdriver.Chrome(options=options)
         driver.get('http://127.0.0.1:8000/')
         time.sleep(1)
         assert 'Textbook Exchange' in driver.title
@@ -117,7 +148,8 @@ class SeleniumViewsTests(LiveServerTestCase):
     def test_2_navbar(self):
         print('')
         print('Selenium TEST 2: Testing the links in the NavBar...')
-        driver = webdriver.Safari()
+        options = webdriver.ChromeOptions()
+        driver = webdriver.Chrome(options=options)
         driver.get('http://127.0.0.1:8000/')
         time.sleep(1)
         print('Selenium TEST 2a: Testing "Available Books"...')
@@ -139,7 +171,8 @@ class SeleniumViewsTests(LiveServerTestCase):
     def test_3_login_form(self):
         print('')
         print('Selenium TEST 3a: Testing the user authentication login form can login a valid user...')
-        driver = webdriver.Safari()
+        options = webdriver.ChromeOptions()
+        driver = webdriver.Chrome(options=options)
         driver.get('http://127.0.0.1:8000/accounts/login/')
         time.sleep(1)
         user_email = driver.find_element(By.ID, 'id_username')
@@ -161,37 +194,3 @@ class SeleniumViewsTests(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/user/1')
         time.sleep(1)
         assert "User's Name: admin" in driver.page_source
-
-
-
-class AddBookViewTest(TestCase):
-    def setUp(self):
-        test_user = User.objects.create(username='testuser', phone='867-5309', email='testuser@example.com', password='testpassword')
-        test_book = Book.objects.create(isbn = '1234567890123', title = 'A Test Book', author='Arthur Testing', format='Hardcover', description='This book defies description')
-        test_user.save()
-        test_book.save()
-        self.ownedbook = OwnedBook.objects.create(user = test_user, book = test_book, is_available = True, condition = 'Like New')
-        self.ownedbook.save()
-        self.url = reverse('owned-book-add', args=[str(self.ownedbook.id)])
-
-    def test_add_book_view_with_valid_data(self):
-        self.client.login(username='testuser', password='testpassword')
-        form_data = {
-            'title': 'A Test Book',
-            'author': 'Arthur Testing',
-        }
-
-        response = self.client.post(self.url, form_data)
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(Book.objects.filter(title='A Test Book', ownedbook=self.ownedbook).exists())
-        # self.assertRedirects(response, reverse('ownedbook-detail', args=[str(self.ownedbook.id)]))
-
-    def test_add_book_view_with_invalid_data(self):
-        self.client.login(username='testuser', password='testpassword')
-        form_data = {}
-        response = self.client.post(self.url, form_data)
-        self.assertEqual(response.status_code, 302)
-
-    def test_add_book_view_when_not_logged_in(self):
-        response = self.client.get(self.url)
-        self.assertRedirects(response, reverse('login') + f'?next={self.url}')
