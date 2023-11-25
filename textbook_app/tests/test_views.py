@@ -53,11 +53,6 @@ class ViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/accounts/login/?next=/book/add/')
 
-    def test_view_url_accessible_book_add(self):
-        response = self.client.get(reverse('book_add'))
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/accounts/login/?next=/book/add/')
-
     def test_view_url_exists_book_edit(self):
         response = self.client.get('/book/edit/1/')
         self.assertEqual(response.status_code, 302)
