@@ -11,28 +11,6 @@ def index(request):
     available_books = OwnedBook.objects.filter(is_available=True).order_by('book__title')
     return render(request, 'textbook_app/index.html', {'available_books': available_books})
 
-# @login_required
-# def book_add(request):
-#     book_info = request.session.pop('book_info', None)
-#     if request.method == 'POST':
-#         form = BookForm(request.POST)
-#         if form.is_valid():
-#             book = form.save(commit=False)
-#             if book_info:
-#                 form = BookForm({
-#                     'isbn': book_info['isbn'],
-#                     'title': book_info['title'],
-#                     'author': book_info['author'],
-#                     'description': book_info['description'],
-#                 })
-#             book.ownedbook = ownedbook
-#             book.save()
-#             messages.success(request, 'Book added successfully!')
-#             return redirect('ownedbook-detail', ownedbook_id)
-#     else:
-#         form = BookForm()
-#     return render(request, 'textbook_app/book_add.html', {'form': form})
-
 @login_required
 def book_add(request):
     book_info = request.session.pop('book_info', None)
