@@ -1,7 +1,9 @@
-from .forms import BookForm, OwnedBookForm, UserForm
+import requests
+from .forms import BookForm, BookSearchForm, OwnedBookForm, UserForm
 from .models import User, Book, OwnedBook
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
@@ -10,30 +12,76 @@ def index(request):
     return render(request, 'textbook_app/index.html', {'available_books': available_books})
 
 @login_required
-def addBook(request, ownedbook_id):
-    ownedbook = OwnedBook.objects.get(pk=ownedbook_id)
+def book_add(request):
+    book_info = request.session.pop('book_info', None)
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
             book = form.save(commit=False)
+            if book_info:
+                form = BookForm({
+                    'isbn': book_info['isbn'],
+                    'title': book_info['title'],
+                    'author': book_info['author'],
+                    'description': book_info['description'],
+                })
             book.ownedbook = ownedbook
             book.save()
+            messages.success(request, 'Book added successfully!')
             return redirect('ownedbook-detail', ownedbook_id)
     else:
         form = BookForm()
-        context = {'form': form}
-        return render(request, 'textbook_app/book_form.html', context)
+    return render(request, 'textbook_app/book_add.html', {'form': form})
 
 @login_required
 def book_add(request):
+    book_info = request.session.pop('book_info', None)
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            if book_info:
+                book.isbn = book_info['isbn']
+                book.title = book_info['title']
+                book.author = book_info['author']
+                book.description = book_info['description']
+
+            book.save()
             return redirect('books')
     else:
         form = BookForm()
     return render(request, 'textbook_app/book_add.html', {'form': form})
+def book_added_success(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    return render(request, 'textbook_app/book_added_success.html', {'book': book})
+
+@login_required
+def book_search_google(request):
+    if request.method == 'POST':
+        search_form = BookSearchForm(request.POST)
+        if search_form.is_valid():
+            isbn = search_form.cleaned_data['isbn']
+            api_url = f'https://www.googleapis.com/books/v1/volumes?q={isbn}'
+            response = requests.get(api_url)
+            if response.status_code == 200:
+                data = response.json()
+                book_info = data.get('items', [])[0].get('volumeInfo', {})
+                book, created = Book.objects.update_or_create(
+                    isbn=isbn,
+                    defaults={
+                        'title': book_info.get('title', ''),
+                        'author': ', '.join(book_info.get('authors', [])),
+                        'description': book_info.get('description', ''),
+                    }
+                )
+                if created:
+                    messages.success(request, 'Book added successfully!')
+                else:
+                    messages.info(request, 'Book already exists in the database.')
+                return redirect('books')
+    else:
+        search_form = BookSearchForm()
+    return render(request, 'textbook_app/book_search_google.html', {'search_form': search_form})
 
 @login_required
 def book_confirm_delete(request, pk):

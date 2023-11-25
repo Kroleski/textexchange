@@ -1,0 +1,42 @@
+{% extends 'textbook_app/base_template.html' %}
+{% block content %}
+<h1>
+    Owned Book Details
+</h1>
+<p>
+    <strong>
+        Title:
+    </strong> 
+    {{ owned_book.book.title }}
+</p>
+<p>
+    <strong>
+        Author(s):
+    </strong> 
+    {{ owned_book.book.author }}
+</p>
+<p>
+    <strong>
+        ISBN:
+    </strong> 
+    {{ book.isbn }}
+</p>
+<p>
+    <strong>
+        Format:
+    </strong> 
+    {{ book.get_format_display }}
+</p>
+<p>
+    <strong>
+        Description:
+    </strong> 
+    {{ book.description }}
+</p>
+<a href="{% url 'book-edit' pk=book.pk %}" class="btn btn-primary">
+    Edit Book
+</a>
+<a href="{% url 'book-confirm-delete' pk=book.pk %}" class="btn btn-danger">
+    Delete Book
+</a>
+{% endblock %}

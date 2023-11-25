@@ -1,0 +1,10 @@
+{% extends 'textbook_app/base_template.html' %}
+
+{% block content %}
+  <h1>Search for a Book on Google Books</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ search_form.as_p }}
+    <button type="submit" class="btn btn-primary">Add Book from Google Books</button>
+  </form>
+{% endblock %}

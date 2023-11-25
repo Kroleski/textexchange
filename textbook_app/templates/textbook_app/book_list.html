@@ -13,9 +13,10 @@
         </li>
     {% endfor %}
 </ul>
-<a href="{% url 'book_add' %}" class="btn btn-primary">
-    Add a New Book to the Database
+<a href="{% url 'book-search-google' %}" class="btn btn-primary">
+    Import a Book (by ISBN)
+</a>
+<a href="{% url 'book-add' %}" class="btn btn-primary">
+    Manually Add a New Book
 </a>
 {% endblock %}
-
-

@@ -40,11 +40,12 @@ class Book(models.Model):
     ('PDF', 'PDF file'),
     ('Digital', 'Digital file containing the book'),
     ('Link', 'Link to the book or a free download site'),
+    ('Unknown', 'Book format is unknown (default)'),
     )
     isbn = models.CharField(max_length=13)
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200, default='', null=True, blank=True)
-    format = models.CharField(max_length=200, choices=FORMAT, blank = False)
+    format = models.CharField(max_length=200, choices=FORMAT, blank = False, default='Unknown')
     description = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.title
