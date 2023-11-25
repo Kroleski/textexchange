@@ -28,9 +28,6 @@ def book_add(request):
     else:
         form = BookForm()
     return render(request, 'textbook_app/book_add.html', {'form': form})
-def book_added_success(request, pk):
-    book = get_object_or_404(Book, pk=pk)
-    return render(request, 'textbook_app/book_added_success.html', {'book': book})
 
 @login_required
 def book_search_google(request):
